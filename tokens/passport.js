@@ -1,6 +1,6 @@
 const JwtStrategy = require('passport-jwt').Strategy;
 const { ExtractJwt } = require('passport-jwt');
-const { secret_key } = require('../env');
+const { secret_key } = require('../config');
 var config = require('../db.js');
 const connection = config.connection
 

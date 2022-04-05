@@ -1,1 +1,4 @@
-# testTask-PEST-API-MySQL
+TestTask
+
+Заспуск сервера:
+npm run dev

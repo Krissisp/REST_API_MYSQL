@@ -1,14 +1,12 @@
-const config = require('../db.js');
-
-const { connection } = config;
+const pathToFile = require('../servises/files/pathToFile')
 
 const notFoundFile = {
   id: {
     custom: {
       async options(id) {
-        const local_path = await connection.awaitQuery(`SELECT local_path FROM files WHERE id='${id}'`);
+        const local_path = await pathToFile(id)
         if (!local_path[0]) {
-          throw new Error('Файл с таким id не найден');
+          throw ('Файл с таким id не найден');
         }
       },
     },

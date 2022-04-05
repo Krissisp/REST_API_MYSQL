@@ -1,5 +1,4 @@
-const config = require('../db.js');
-const connection = config.connection
+const getUsersId = require('../servises/auth/getUsersId.js');
 
 const regitrationUserSchema = {
   id: {
@@ -7,13 +6,14 @@ const regitrationUserSchema = {
     errorMessage: 'id не должен быть пустым',
     custom: {
       async options(id) {
-        if (id.match(/.*@.*\..*/) === null && !Number.isInteger(Number(id))) {
-          throw new Error('id должен быть телефоном или почтой');
+        const regexNumber = new RegExp(/^(\+7|7|8)?[\s\-]?\(?[489][0-9]{2}\)?[\s\-]?[0-9]{3}[\s\-]?[0-9]{2}[\s\-]?[0-9]{2}$/)
+        if (id.match(/.*@.*\..*/) === null && id.match(regexNumber) === null) {
+          throw ('id должен быть телефоном или почтой');
         }
-        const users = await connection.awaitQuery('SELECT id FROM users');
-        const isError = users.find((user) => user.id === id);
-        if (isError) {
-          throw new Error('Такой id уже существует');
+        const users = await getUsersId()
+        const isExists = users.find((user) => user.id === id);
+        if (isExists) {
+          throw ('Такой id уже существует');
         }
       },
     },

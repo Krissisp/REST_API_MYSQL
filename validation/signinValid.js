@@ -1,17 +1,17 @@
-const config = require('../db.js');
-const connection = config.connection
-
 const Crypto = require('crypto-js');
-const { secret_key } = require('../env');
+const { secret_key } = require('../config');
+const getUsersId = require('../servises/auth/getUsersId.js');
+const getUsersHashPasswords = require('../servises/auth/getUsersHashPasswords.js');
+
 
 const signValidData = {
   id: {
     custom: {
       async options(id) {
-        const users = await connection.awaitQuery('SELECT id FROM users');
-        const user = users.find((user) => user.id === id);
+        const users = await getUsersId();
+        const user = await users.find((user) => user.id === id);
         if (!user) {
-          throw new Error('Пользователь не найден');
+          throw ('Пользователь не найден');
         }
       },
     },
@@ -19,11 +19,12 @@ const signValidData = {
   password: {
     custom: {
       async options(password) {
-        const hash = await connection.awaitQuery('SELECT hashPassword FROM users');
-        const find = hash.find((el) => Crypto.AES.decrypt(el.hashPassword, secret_key)
+        const hashs = await getUsersHashPasswords()
+      
+        const exists = await hashs.find((hashs) => Crypto.AES.decrypt(hashs.hashPassword, secret_key)
           .toString(Crypto.enc.Utf8) === password);
-        if (!find) {
-          throw new Error('Неверный пароль');
+        if (!exists) {
+          throw ('Неверный пароль');
         }
       },
     },

@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const { secret_key, secret_ref_key } = require('../env');
+const { secret_key, secret_ref_key } = require('../config');
 
 class Token {
   getToken = function getToken(id) {

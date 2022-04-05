@@ -2,7 +2,7 @@ const mysql = require('mysql-await');
 
 const {
   SERVER, USER, DATABASE, PASSWORD,
-} = require('./env');
+} = require('./config');
 
 const config = {
   host: SERVER,
